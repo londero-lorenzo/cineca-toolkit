@@ -7,7 +7,7 @@
     "cineca-toolkit": "src/cli/index.js"
   },
   "scripts": {
-    "build": "esbuild src/bookmarklet/index.js --bundle --minify --format=iife --target=es2020 --outfile=dist/bookmarklet.min.js"
+    "build": "esbuild src/bookmarklet/index.js --bundle --minify --format=iife --target=es2020 --outfile=dist/bookmarklet.min.js && node scripts/build-bookmarklet.js"
   },
   "keywords": [
     "cineca",

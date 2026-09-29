@@ -41,18 +41,15 @@ Re-running the same command skips PDFs already present in the output folder.
 ## Bookmarklet usage
 
 1. Create a new bookmark (any bookmarks bar works).
-2. Set its **URL** (not its name) to:
-
-   ```
-   javascript:(()%3D%3E%7Bconst%20e%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2Flondero-lorenzo%2Fcineca-toolkit%40main%2Fdist%2Fbookmarklet.min.js%22%2Ct%3Ddocument.createElement(%22script%22)%3Bt.src%3D%60%24%7Be%7D%3Ft%3D%24%7BDate.now()%7D%60%2Cdocument.body.appendChild(t)%7D)()%3B
-   ```
-
+2. Set its **URL** (not its name) to the entire contents of [`bookmarklets/download-zip.js`](bookmarklets/download-zip.js) — a single long `javascript:...` line. Copy the whole thing; most browsers' bookmark-edit URL field accepts arbitrarily long text.
 3. Name it something memorable, e.g. "Download Cineca PDFs".
 4. Open any course or teaching page on a Cineca course catalogue and click the bookmark:
    - on a **course page**, pick the teachings you want and confirm — a ZIP downloads;
    - on a **teaching page**, the PDF downloads immediately.
 
-The bookmark itself only injects a small loader script; the actual logic lives in `dist/bookmarklet.min.js`, hosted via jsDelivr and tracking the `main` branch. Project updates take effect automatically — no need to reinstall the bookmark after a `git pull`.
+Unlike moodle-toolkit, this bookmarklet can't be a small loader that fetches the real code from jsDelivr at click-time: the catalogue's own Content-Security-Policy (`default-src 'self' 'unsafe-inline' *.cineca.it`) blocks loading *any* external script or `fetch()` — the whole bundle has to be inline in the bookmark already. Its own calls to the catalogue's API (`*.cineca.it`) are unaffected, since that's within the allowed origin.
+
+This means the bookmark doesn't auto-update: after changing `src/bookmarklet/`, rebuild and **reinstall the bookmark** with the new contents of `bookmarklets/download-zip.js`.
 
 ## How it works
 
@@ -72,8 +69,9 @@ cineca-toolkit/
 │   ├── core/          # Shared logic: URL parsing, API client, teaching list, filenames
 │   ├── cli/           # CLI entry point
 │   └── bookmarklet/   # Bookmarklet entry point, UI overlay, ZIP bundling
-├── bookmarklets/       # Ready-to-use bookmarklet source
-├── dist/               # Built/minified bookmarklet output
+├── bookmarklets/       # Generated: bookmarklet.min.js wrapped as a pasteable javascript: URI
+├── dist/               # Generated: built/minified bookmarklet bundle
+├── scripts/            # Build helper that wraps dist/ into bookmarklets/
 ├── package.json
 ├── LICENSE
 └── .gitignore
@@ -81,9 +79,9 @@ cineca-toolkit/
 
 ## Development
 
-After changing anything under `src/bookmarklet/` or `src/core/`, rebuild the bundle and commit the output — jsDelivr serves the committed file directly, there's no build step on their end:
+After changing anything under `src/bookmarklet/` or `src/core/`, rebuild both generated files and commit them (nothing serves them at runtime — `bookmarklets/download-zip.js` only exists so it can be pasted straight into a bookmark):
 
 ```bash
 npm run build
-git add dist/bookmarklet.min.js
+git add dist/bookmarklet.min.js bookmarklets/download-zip.js
 ```
