@@ -51,6 +51,10 @@ Unlike moodle-toolkit, this bookmarklet can't be a small loader that fetches the
 
 This means the bookmark doesn't auto-update: after changing `src/bookmarklet/`, rebuild and **reinstall the bookmark** with the new contents of `bookmarklets/download-zip.js`.
 
+## Known limitations
+
+- [ ] **The bookmarklet URL is very long** (~150k characters, inline by necessity — see above) and doesn't fit in the browser's own address bar; it only fits because bookmark *edit* fields accept arbitrary-length text. Worth shrinking, e.g. by dropping JSZip (the bulk of the bundle) and downloading each selected PDF individually instead of zipping them, or finding a lighter zip encoder.
+
 ## How it works
 
 Everything needed — the course's list of teachings, and each teaching's PDF — comes from the catalogue's own JSON API:
