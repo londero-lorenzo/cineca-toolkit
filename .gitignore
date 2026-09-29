@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Downloaded output
+*.pdf
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env
+.env

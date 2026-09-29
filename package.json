@@ -1,0 +1,27 @@
+{
+  "name": "cineca-toolkit",
+  "version": "0.1.0",
+  "description": "Download course-plan PDFs from Cineca's university course catalogue (coursecatalogue.cineca.it), via CLI or bookmarklet.",
+  "type": "module",
+  "bin": {
+    "cineca-toolkit": "src/cli/index.js"
+  },
+  "scripts": {
+    "build": "esbuild src/bookmarklet/index.js --bundle --minify --format=iife --target=es2020 --outfile=dist/bookmarklet.min.js"
+  },
+  "keywords": [
+    "cineca",
+    "coursecatalogue",
+    "university",
+    "bookmarklet",
+    "cli"
+  ],
+  "author": "Lorenzo Londero",
+  "license": "MIT",
+  "dependencies": {
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}
